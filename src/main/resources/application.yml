@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://api-db:3306/dockerapi
+    username: docker
+    password: password_1
+  jpa:
+    hibernate:
+      ddl-auto: update

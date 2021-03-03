@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  dockerapi:
+    container_name: api
+    build:
+      context: .
+    image: api:latest
+    ports:
+      - 56000:8080
+    networks:
+      - api-net
+    depends_on:
+      - api-db
+    restart: always
+
+  api-db:
+    container_name: api-db
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      MYSQL_DATABASE: dockerapi
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: password_1
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 57000:3306
+    networks:
+      - api-net
+    volumes:
+      - apidata:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 58000:8080
+    networks:
+      - api-net
+
+networks:
+  api-net:
+    driver: bridge
+
+volumes:
+  apidata:
